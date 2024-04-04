@@ -1,30 +1,29 @@
-const mysql = require('mysql');
+const express = require('express')
+const cors = require('cors')
 
-// Create connection
-const connection = mysql.createConnection({
-    host: '127.0.0.1', // Change this to your MySQL host
-    user: 'root',
-    password: 'root',
-    database: 'rce' // The database you created earlier
-});
+const app = express()
+var corOptions = {
+    origin: 'https://localhost:8081'
+}
 
-// Connect
-connection.connect((err) => {
-    if (err) {
-        console.error('Error connecting to MySQL database: ' + err.stack);
-        return;
-    }
-    console.log('Connected to MySQL database as id ' + connection.threadId);
-});
+app.use(cors(corOptions))
 
-// Perform database operations
-// For example, you can run queries here
+app.use(express.json())
 
-// Close connection when done
-connection.end((err) => {
-    if (err) {
-        console.error('Error closing MySQL connection: ' + err.stack);
-        return;
-    }
-    console.log('MySQL connection closed.');
-});
+app.use(express.urlencoded({extended: true}))
+
+app.get('/', (req, res) =>{
+    res.json({message : "API working"})
+})
+
+
+// const router = require('./routes/employeeRouter.js')
+// app.use('/api', router)
+
+const PORT = 8080
+
+
+
+app.listen(PORT, () => {
+    console.log("server running on http://localhost:8080");
+})

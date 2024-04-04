@@ -1,13 +1,29 @@
-const mysql =  require('mysql');
+const dbConfig = require('../../config/dbconfig.js')
+const {Sequelize, DataTypes} = require('sequelize')
 
 
-const con = mysql.createConnection({
-    host: "3306",
-    user: "root",
-    password: "root"
-});
-  
-con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-  });
+const sequelize = new Sequelize(
+    dbConfig.DB,
+    dbConfig.USER,
+    dbConfig.PASSWORD,{
+        host:dbConfig.HOST,
+        dialect:dbConfig.dialect,
+        logging: false
+    },
+    )
+
+sequelize.authenticate()
+.then(() => {
+    console.log("connection established");
+})
+.catch((error) =>{
+    console.log("error", error);
+})
+
+sequelize.sync({ force:false })
+
+// sequelize.sync({alter:true, drop:false})
+
+
+module.exports = sequelize;
+
